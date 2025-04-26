@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
-  <title>Display GeoJSON with Esri.js</title>
+  <title>Display GeoJSON with ArcGIS JS</title>
   <link rel="stylesheet" href="https://js.arcgis.com/4.29/esri/themes/light/main.css" />
   <script src="https://js.arcgis.com/4.29/"></script>
   <style>
@@ -32,7 +32,18 @@
       const geojsonUrl = "https://www.arcgis.com/sharing/rest/content/items/e9fc49d695e54c2a9e8ab66f83315409/data";
 
       const geojsonLayer = new GeoJSONLayer({
-        url: geojsonUrl
+        url: geojsonUrl,
+        renderer: {
+          type: "simple",
+          symbol: {
+            type: "simple-fill",
+            color: [255, 0, 0, 0.4],
+            outline: {
+              color: [255, 0, 0],
+              width: 1
+            }
+          }
+        }
       });
 
       const map = new Map({
@@ -43,8 +54,12 @@
       const view = new MapView({
         container: "viewDiv",
         map: map,
-        center: [-82.4, 29.65], // Adjust this based on your data
+        center: [-82.4, 29.65],
         zoom: 10
+      });
+
+      geojsonLayer.when(() => {
+        view.goTo(geojsonLayer.fullExtent);
       });
 
     });
